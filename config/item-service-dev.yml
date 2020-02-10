@@ -1,6 +1,10 @@
 spring:
   application:
     name: item-service
+  #由于配置中心的优先级大于yml文件的优先级,所以设置的集群参数会被覆盖掉,导致只能启用一台服务器,以下配置就是禁止覆盖参数
+  cloud:
+    config:
+      override-none: true    
 server:
   port: 8001
  
