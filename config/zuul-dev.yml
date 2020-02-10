@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: zuul
+server:
+  port: 3001
+  
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka1:2001/eureka,http://eureka2:2002/eureka
+#配置zuul路由配置
+zuul:
+  routes:
+    #表示当访问item-setvice下的任意路径时,都是访问的item-service服务器
+    item-service: /item-service/**
+    user-service: /user-service/**
+    order-service: /order-service/**
+       
+#zuul默认只启用ribbon的负载均衡,不启用ribbon的重试,zuul不建议使用ribbon的重试
+#配置ribbon的重试机制:
+  retryable: true
+
+#配置重试的参数
+ribbon:
+  ConnentTimeout: 1000
+  ReadTimeout: 1000
+  MaxAutoRetries: 1
+  maxAutoRetriesNextServer: 2
+
+#配置hystrix的超时时间
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000
+
+#配置暴露端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - hystrix.stream            
